@@ -34,6 +34,7 @@ function initialize() {
       });
       google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent(place.name);
+        console.log(place);
         console.log(place.opening_hours);
         if (place.opening_hours.open_now) {
           alert("Penny is OPEN! :D");
