@@ -18,81 +18,87 @@ var mapData = {
 		zoom: 14
 	}
 };
+
 var map;
 // Views
-// var DetailView = {};
+var DetailView = {
+	renderNotShowing: function () {
+		console.log("asdf");
+	},
+	renderShowing: function() {
+		console.log("fdsa");
+	}
+};
 // var KeyView = {};
 // var ListView = {};
 
-var MapView = function() {
+var MapView = {
+	initialize: function() {
+		// var bounds = new google.maps.LatLngBounds();
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
+		var markers = [];
+		var mapBounds = [];
 
-};
+		google.maps.event.addDomListener(map, 'idle', function() {
+			calculateCenter();
+		});
+		google.maps.event.addDomListener(window, 'resize', function() {
+			map.setCenter(center);
+		});
+
+		for (var i = 0; i < mapData.locations.length; i++) {
+			// console.log(i);
+			var request = mapData.locations[i];
+		 	var infowindow = new google.maps.InfoWindow();
+			var service = new google.maps.places.PlacesService(map);
+			service.getDetails(request, function(place, status) {
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					var marker = new google.maps.Marker({
+						map: map,
+						position: place.geometry.location
+					});
+					markers.push(marker);
+					google.maps.event.addListener(markers[markers.length-1], 'click', function() {
+						var infoWindowText = place.name + ": ";
+						try {
+							if (place.opening_hours.open_now) {
+								infoWindowText += "Open.";
+							}
+							else {
+								infoWindowText += "Closed.";
+							}
+						}
+						catch(err) {
+							infoWindowText += "Opening times unavailable.";
+						}
+						infowindow.setContent(infoWindowText);
+						infowindow.open(map, this);
+					});
+				}
+				if (markers.length == mapData.locations.length) {
+					calculateCenter();
+				}
+			});
+		}
+	},
+	initializeMap: function() {
+		google.maps.event.addDomListener(window, 'load', MapView.initialize);
+	}
+}
 
 // ModelViews
 var ModelView = function() {
 
 };
 
-function initialize() {
-	// var bounds = new google.maps.LatLngBounds();
-	map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
-	var markers = [];
-	var mapBounds = [];
-	for (var i = 0; i < mapData.locations.length; i++) {
-		// console.log(i);
-		var request = mapData.locations[i];
-	 	var infowindow = new google.maps.InfoWindow();
-		var service = new google.maps.places.PlacesService(map);
-		service.getDetails(request, function(place, status) {
-			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				var marker = new google.maps.Marker({
-					map: map,
-					position: place.geometry.location
-				});
-				markers.push(marker);
-				google.maps.event.addListener(markers[markers.length-1], 'click', function() {
-					var infoWindowText = place.name + ": ";
-					try {
-						if (place.opening_hours.open_now) {
-							infoWindowText += "Open.";
-						}
-						else {
-							infoWindowText += "Closed.";
-						}
-					}
-					catch(err) {
-						infoWindowText += "Opening times unavailable.";
-					}
-					infowindow.setContent(infoWindowText);
-					infowindow.open(map, this);
-				});
-			}
-
-			google.maps.event.addDomListener(map, 'idle', function() {
-			  calculateCenter();
-			});
-			google.maps.event.addDomListener(window, 'resize', function() {
-			  map.setCenter(center);
-			  console.log("shis")
-			});
-			// if (markers.length == mapData.locations.length) {
-			// 	for(i=0;i<markers.length;i++) {
-			// 		bounds.extend(markers[i].getPosition());
-			// 		console.log()
-			// 	}
-			// 	map.fitBounds(bounds);
-			// }
-		});
-	}
-	// window.addEventListener('resize', function(e) {
-	//   // Make sure the map bounds get updated on page resize
-	//   map.fitBounds(mapBounds);
-	// });
-}
-
 var center;
 function calculateCenter() {
-  center = map.getCenter();
+	center = map.getCenter();
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
+function initializePage() {
+	DetailView.renderNotShowing();
+	MapView.initializeMap();
+}
+
+initializePage();
