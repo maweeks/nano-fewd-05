@@ -15,7 +15,7 @@ var mapData = {
 		{placeId: "ChIJfdVmUMrL3kcRwCu3hudCZpo"}  //Three Tuns
 	], //https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
 	options: {
-		center: { lat: 51.2784, lng: 1.0826},
+		center: { lat: 51.27952748155104, lng: 1.0807975555419302},
     	disableDefaultUI: true,
 		zoom: 14
 	}
