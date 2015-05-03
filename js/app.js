@@ -1,5 +1,6 @@
-// Models
+var map;
 var mapData = {
+	center: 0,
 	locations: [
 		{placeId: "ChIJh8UibbXL3kcRSeRb7F8fDDo"}, //Ball Room
 		//{placeId: "ChIJ_bpIw7XL3kcR09ogp8rgfCg"}, //Black Griffin
@@ -15,24 +16,43 @@ var mapData = {
 	], //https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
 	options: {
 		center: { lat: 51.2784, lng: 1.0826},
+    	disableDefaultUI: true,
 		zoom: 14
 	}
 };
 
-var map;
+var detailData = {
+	arrow: "img/arrowLeft.png"
+};
+
+// ModelView
+var ViewModel = function() {
+	var self = this;
+	//this.detailButtonClick = ko.observable(  );
+	this.detailButtonSrc = ko.observable( detailData.arrow );
+}
+
 // Views
 var DetailView = {
 	renderNotShowing: function () {
-		console.log("asdf");
+		console.log("Not showing");
 	},
-	renderShowing: function() {
-		console.log("fdsa");
+	renderShowing: function(selected) {
+		if (selected != "") {
+			console.log("Showing " + selected.name);
+		}
+		else {
+			console.log("Showing empty");
+		}
 	}
 };
 // var KeyView = {};
 // var ListView = {};
 
-var MapView = {
+var FullMap = {
+	calculateCenter: function() {
+		mapData.center = map.getCenter();
+	},
 	initialize: function() {
 		// var bounds = new google.maps.LatLngBounds();
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
@@ -40,10 +60,10 @@ var MapView = {
 		var mapBounds = [];
 
 		google.maps.event.addDomListener(map, 'idle', function() {
-			calculateCenter();
+			FullMap.calculateCenter();
 		});
 		google.maps.event.addDomListener(window, 'resize', function() {
-			map.setCenter(center);
+			map.setCenter(mapData.center);
 		});
 
 		for (var i = 0; i < mapData.locations.length; i++) {
@@ -51,6 +71,12 @@ var MapView = {
 			var request = mapData.locations[i];
 		 	var infowindow = new google.maps.InfoWindow();
 			var service = new google.maps.places.PlacesService(map);
+
+
+					google.maps.event.addListener(infowindow,'closeclick',function(){
+						console.log("close")
+					});
+
 			service.getDetails(request, function(place, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
 					var marker = new google.maps.Marker({
@@ -76,29 +102,21 @@ var MapView = {
 					});
 				}
 				if (markers.length == mapData.locations.length) {
-					calculateCenter();
+					FullMap.calculateCenter();
 				}
 			});
 		}
 	},
 	initializeMap: function() {
-		google.maps.event.addDomListener(window, 'load', MapView.initialize);
+		google.maps.event.addDomListener(window, 'load', FullMap.initialize);
 	}
 }
 
-// ModelViews
-var ModelView = function() {
-
-};
-
-var center;
-function calculateCenter() {
-	center = map.getCenter();
-}
-
 function initializePage() {
+	console.log(detailData.arrow)
+	//ko.applyBindings(new ViewModel());
 	DetailView.renderNotShowing();
-	MapView.initializeMap();
+	FullMap.initializeMap();
 }
 
 initializePage();
