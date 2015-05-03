@@ -9,17 +9,22 @@ body {
 	position: relative;
 }
 
+button {
+	background-color: #D9D9D9;
+	width: 56px
+}
+
 #detaitsButton {
 	top: 10px;
 	right: 10px;
 }
 
 #detaitsContent {
-	background-color: red;
+	background-color: rgba(235, 235, 235, 0.9);
 	height: 100%;
 	right: 0;
 	top: 0;
-	width: 300px;
+	width: 275px;
 }
 
 #map-canvas {
@@ -34,8 +39,16 @@ body {
 	top: 10px;
 }
 
+.close {
+	padding: 10px;
+	text-align: right;
+}
+
+.notNow {
+	display: none;
+}
+
 .overlayOne {
-	background-color: #D9D9D9;
 	position: absolute;
 	z-index: 11;
 }

@@ -15,11 +15,18 @@
 
 		<button class="overlayOne" id="searchButton">Search</button>
 
-		<!-- <div class="overlayTwo" id="searchContent"></div> -->
+		<!-- <div class="overlayTwo notNow" id="searchContent"></div> -->
 
-		<button class="overlayOne" id="detaitsButton">Details</button>
+		<button class="overlayOne" id="detaitsButton" onclick="DetailView.renderShowing()">Details</button>
 
-		<div class="overlayTwo" id="detaitsContent"></div>
+		<div class="overlayTwo notNow" id="detaitsContent">
+			<div class="close">
+				<button onclick="DetailView.renderNotShowing()">Close</button>
+			</div>
+			<div>
+				
+			</div>
+		</div>
 
 		<!-- <div id="keyButton"></div> -->
 		<!-- <div id="keyInfo"></div> -->

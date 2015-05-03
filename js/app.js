@@ -15,30 +15,37 @@ var mapData = {
 		{placeId: "ChIJfdVmUMrL3kcRwCu3hudCZpo"}  //Three Tuns
 	], //https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
 	options: {
-		center: { lat: 51.27952748155104, lng: 1.0807975555419302},
+		center: { lat: 51.27953, lng: 1.08080},
+		// center: { lat: 51.27952748155, lng: 1.0807975555419},
     	disableDefaultUI: true,
 		zoom: 14
-	}
+	},
+	selected: ""
 };
 
-var detailData = {
-	arrow: "img/arrowLeft.png"
-};
+// var detailData = {
+// 	arrow: "img/arrowLeft.png"
+// };
 
 // ModelView
 var ViewModel = function() {
 	var self = this;
-	//this.detailButtonClick = ko.observable(  );
-	this.detailButtonSrc = ko.observable( detailData.arrow );
+	// this.detailButtonClick = ko.observable(  );
+	// this.detailButtonSrc = ko.observable( detailData.arrow );
 }
 
 // Views
 var DetailView = {
 	renderNotShowing: function () {
-		console.log("Not showing");
+		var detailsElement = document.getElementById('detaitsContent');
+		detailsElement.className = detailsElement.className.replace(' notNow', '');
+		detailsElement.className += ' notNow';
 	},
-	renderShowing: function(selected) {
-		if (selected != "") {
+	renderShowing: function() {
+		// console.log(selected);
+		var detailsElement = document.getElementById('detaitsContent');
+		detailsElement.className = detailsElement.className.replace(' notNow', '');
+		if (mapData.selected != "") {
 			console.log("Showing " + selected.name);
 		}
 		else {
@@ -113,9 +120,8 @@ var FullMap = {
 }
 
 function initializePage() {
-	console.log(detailData.arrow)
 	//ko.applyBindings(new ViewModel());
-	DetailView.renderNotShowing();
+	// DetailView.renderNotShowing();
 	FullMap.initializeMap();
 }
 
