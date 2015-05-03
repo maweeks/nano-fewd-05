@@ -43,7 +43,11 @@ button {
 	left: 0;
 }
 
-.close {
+.closeLeft {
+	text-align: left;
+}
+
+.closeRight {
 	text-align: right;
 }
 
@@ -75,7 +79,8 @@ button {
 }
 
 /* When on mobile/thin browser */
-@media all and (max-width: 479px) {
+/*@media all and (max-width: 479px) {*/
+@media all and (max-width: 549px) {
 	.overlayOne {
 		focus {outline:0;}
 	}

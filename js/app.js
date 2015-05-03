@@ -21,19 +21,12 @@ var mapData = {
 		{placeId: "ChIJfdVmUMrL3kcRwCu3hudCZpo"}  //Three Tuns
 	], //https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
 	options: {
-		center: { lat: 51.27953, lng: 1.08080},
-		// center: { lat: 51.27952748155, lng: 1.0807975555419},
+		// rounded for simpler code: {lat: 51.27952748155, lng: 1.0807975555419}
+		center: { lat: 51.2795, lng: 1.0808},
     	disableDefaultUI: true,
 		zoom: 14
 	}
 };
-
-var searchData = {
-	classList : "overlayTwo notNow"
-}
-// var detailData = {
-// 	arrow: "img/arrowLeft.png"
-// };
 
 // ModelView
 var ViewModel = function() {
@@ -56,50 +49,7 @@ var ViewModel = function() {
 	self.showSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", ""));
 	};
-	// this.detailButtonClick = ko.observable(  );
-	// this.detailButtonSrc = ko.observable( detailData.arrow );
 }
-
-// Views
-// var DetailView = {
-// 	renderNotShowing: function () {
-// 		var detailsElement = document.getElementById('detailsContent');
-// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
-// 		detailsElement.className += ' notNow';
-// 	},
-// 	renderShowing: function() {
-// 		// console.log(selected);
-// 		var detailsElement = document.getElementById('detailsContent');
-// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
-// 		if (mapData.selected != "") {
-// 			DetailView.createMapData();
-// 		}
-// 		else {
-// 			console.log("Showing empty");
-// 			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
-// 		}
-// 	}
-// };
-
-// var SearchView = {
-// 	renderNotShowing: function () {
-// 		var detailsElement = document.getElementById('searchContent');
-// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
-// 		detailsElement.className += ' notNow';
-// 	},
-// 	renderShowing: function() {
-// 		// console.log(selected);
-// 		var detailsElement = document.getElementById('searchContent');
-// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
-// 		if (mapData.selected != "") {
-// 			document.getElementById('detailsInfo').innerHTML = ViewModel.createDetailedData();
-// 		}
-// 		else {
-// 			console.log("Showing empty");
-// 			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
-// 		}
-// 	}
-// }
 
 var FullMap = {
 	calculateCenter: function() {
