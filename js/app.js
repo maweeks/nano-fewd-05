@@ -1,7 +1,3 @@
-var locationsData = {
-	locations:[],
-	selected: 0
-};
 // Variable containing the google map.
 var map;
 
@@ -28,17 +24,38 @@ var mapData = {
 	}
 };
 
+// Variable to store the view model in.
+var myViewModel;
+
+
 // ModelView
 var ViewModel = function() {
 	var self = this;
 
+	self.locationsList = 0;
+	self.selected = ko.observable( "" );
+
 	// details
+	self.detailsClass = ko.observable( "overlayTwo notNow" );
+	self.detailsHTML = ko.observable( "" );
+	self.generateDetails = function() {
+		self.detailsHTML( '<h3>' + self.selected() + '</h3>' );
+	};
+	self.generateError = function() {
+		self.detailsHTML( '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>' );
+	};
 	self.hideDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", "") + " notNow");
 	};
-	self.detailsClass = ko.observable( "overlayTwo notNow" );
 	self.showDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", ""));
+		console.log(self.selected())
+		if (self.selected() != "") {
+			self.generateDetails();
+		}
+		else {
+			self.generateError();
+		}
 	};
 
 	// search
@@ -60,7 +77,6 @@ var FullMap = {
 		// var bounds = new google.maps.LatLngBounds();
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
 		var markers = [];
-		var mapBounds = [];
 
 		google.maps.event.addDomListener(map, 'idle', function() {
 			FullMap.calculateCenter();
@@ -75,8 +91,10 @@ var FullMap = {
 		 	var infowindow = new google.maps.InfoWindow();
 			var service = new google.maps.places.PlacesService(map);
 
+
 			google.maps.event.addListener(infowindow,'closeclick',function(){
-				console.log("close")
+				myViewModel.selected("");
+				myViewModel.generateError();
 			});
 
 			service.getDetails(request, function(place, status) {
@@ -87,7 +105,11 @@ var FullMap = {
 					});
 					markers.push(marker);
 					google.maps.event.addListener(markers[markers.length-1], 'click', function() {
-						var infoWindowText = place.name + ": ";
+
+						myViewModel.selected(place.name);
+						myViewModel.generateDetails();
+
+						var infoWindowText = "<a href='javascript:myViewModel.showDetails();' >" + place.name + "</a>: ";
 						try {
 							if (place.opening_hours.open_now) {
 								infoWindowText += "Open.";
@@ -102,7 +124,7 @@ var FullMap = {
 						infowindow.setContent(infoWindowText);
 						infowindow.open(map, this);
 					});
-				}
+				}            
 				if (markers.length == mapData.locations.length) {
 					FullMap.calculateCenter();
 				}
@@ -117,5 +139,6 @@ var FullMap = {
 function initializePage() {
 	// DetailView.renderNotShowing();
 	FullMap.initializeMap();
-	ko.applyBindings(new ViewModel());
+	myViewModel = new ViewModel();
+	ko.applyBindings(myViewModel);
 }
