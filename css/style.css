@@ -20,11 +20,7 @@ button {
 }
 
 #detailsContent {
-	background-color: rgba(235, 235, 235, 0.9);
-	height: 100%;
 	right: 0;
-	top: 0;
-	width: 275px;
 }
 
 #detailsInfo h3 {
@@ -43,8 +39,16 @@ button {
 	top: 15px;
 }
 
+#searchContent {
+	left: 0;
+}
+
 .close {
 	text-align: right;
+}
+
+.details {
+	margin: 15px;
 }
 
 .notNow {
@@ -57,8 +61,11 @@ button {
 }
 
 .overlayTwo {
-	padding: 15px;
+	background-color: rgba(235, 235, 235, 0.9);
+	height: 100%;
 	position: absolute;
+	top: 0;
+	width: 275px;
 	z-index: 12;
 }
 
@@ -69,11 +76,11 @@ button {
 
 /* When on mobile/thin browser */
 @media all and (max-width: 479px) {
-	#detaitsContent {
-		width: 100%;
-	}
-
 	.overlayOne {
 		focus {outline:0;}
+	}
+
+	.overlayTwo {
+		width: 100%;
 	}
 }

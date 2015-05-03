@@ -12,21 +12,26 @@
 	</head>
 	<body>
 		<div id="map-canvas"></div>
+		<button class="overlayOne" id="searchButton" onclick="SearchView.renderShowing()">Search</button>
 
-		<button class="overlayOne" id="searchButton">Search</button>
-
-		<!-- <div class="overlayTwo notNow" id="searchContent"></div> -->
+		<div class="overlayTwo notNow" id="searchContent">
+			<div class="close details">
+				<button onclick="SearchView.renderNotShowing()">Close</button>
+			</div>
+			<div class="search" id="searchInfo">
+				<input>
+				<ul id="searchList">
+				</ul>
+			</div>
+		</div>
 
 		<button class="overlayOne" id="detailsButton" onclick="DetailView.renderShowing()">Details</button>
 
 		<div class="overlayTwo notNow" id="detailsContent">
-			<div class="close">
+			<div class="close details">
 				<button onclick="DetailView.renderNotShowing()">Close</button>
 			</div>
-			<div id="detailsInfo"></div>
+			<div class="details" id="detailsInfo"></div>
 		</div>
-
-		<!-- <div id="keyButton"></div> -->
-		<!-- <div id="keyInfo"></div> -->
 	</body>
 </html>
