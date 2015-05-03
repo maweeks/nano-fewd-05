@@ -1,6 +1,12 @@
+var locationsData = {
+	locations:[],
+	selected: 0
+};
+// Variable containing the google map.
 var map;
+
+// Variable containing all startup data.
 var mapData = {
-	center: 0,
 	locations: [
 		{placeId: "ChIJh8UibbXL3kcRSeRb7F8fDDo"}, //Ball Room
 		//{placeId: "ChIJ_bpIw7XL3kcR09ogp8rgfCg"}, //Black Griffin
@@ -19,10 +25,12 @@ var mapData = {
 		// center: { lat: 51.27952748155, lng: 1.0807975555419},
     	disableDefaultUI: true,
 		zoom: 14
-	},
-	selected: ""
+	}
 };
 
+var searchData = {
+	classList : "overlayTwo notNow"
+}
 // var detailData = {
 // 	arrow: "img/arrowLeft.png"
 // };
@@ -30,57 +38,74 @@ var mapData = {
 // ModelView
 var ViewModel = function() {
 	var self = this;
+
+	// details
+	self.hideDetails = function() {
+		self.detailsClass(self.detailsClass().replace(" notNow", "") + " notNow");
+	};
+	self.detailsClass = ko.observable( "overlayTwo notNow" );
+	self.showDetails = function() {
+		self.detailsClass(self.detailsClass().replace(" notNow", ""));
+	};
+
+	// search
+	self.hideSearch = function() {
+		self.searchClass(self.searchClass().replace(" notNow", "") + " notNow");
+	};
+	self.searchClass = ko.observable( "overlayTwo notNow" );
+	self.showSearch = function() {
+		self.searchClass(self.searchClass().replace(" notNow", ""));
+	};
 	// this.detailButtonClick = ko.observable(  );
 	// this.detailButtonSrc = ko.observable( detailData.arrow );
 }
 
 // Views
-var DetailView = {
-	renderNotShowing: function () {
-		var detailsElement = document.getElementById('detailsContent');
-		detailsElement.className = detailsElement.className.replace(' notNow', '');
-		detailsElement.className += ' notNow';
-	},
-	renderShowing: function() {
-		// console.log(selected);
-		var detailsElement = document.getElementById('detailsContent');
-		detailsElement.className = detailsElement.className.replace(' notNow', '');
-		if (mapData.selected != "") {
-			DetailView.createMapData();
-		}
-		else {
-			console.log("Showing empty");
-			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
-		}
-	}
-};
+// var DetailView = {
+// 	renderNotShowing: function () {
+// 		var detailsElement = document.getElementById('detailsContent');
+// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
+// 		detailsElement.className += ' notNow';
+// 	},
+// 	renderShowing: function() {
+// 		// console.log(selected);
+// 		var detailsElement = document.getElementById('detailsContent');
+// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
+// 		if (mapData.selected != "") {
+// 			DetailView.createMapData();
+// 		}
+// 		else {
+// 			console.log("Showing empty");
+// 			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
+// 		}
+// 	}
+// };
 
-var SearchView = {
-	renderNotShowing: function () {
-		var detailsElement = document.getElementById('searchContent');
-		detailsElement.className = detailsElement.className.replace(' notNow', '');
-		detailsElement.className += ' notNow';
-	},
-	renderShowing: function() {
-		// console.log(selected);
-		var detailsElement = document.getElementById('searchContent');
-		detailsElement.className = detailsElement.className.replace(' notNow', '');
-		if (mapData.selected != "") {
-			document.getElementById('detailsInfo').innerHTML = ViewModel.createDetailedData();
-		}
-		else {
-			console.log("Showing empty");
-			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
-		}
-	}
-}
-// var KeyView = {};
-// var ListView = {};
+// var SearchView = {
+// 	renderNotShowing: function () {
+// 		var detailsElement = document.getElementById('searchContent');
+// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
+// 		detailsElement.className += ' notNow';
+// 	},
+// 	renderShowing: function() {
+// 		// console.log(selected);
+// 		var detailsElement = document.getElementById('searchContent');
+// 		detailsElement.className = detailsElement.className.replace(' notNow', '');
+// 		if (mapData.selected != "") {
+// 			document.getElementById('detailsInfo').innerHTML = ViewModel.createDetailedData();
+// 		}
+// 		else {
+// 			console.log("Showing empty");
+// 			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
+// 		}
+// 	}
+// }
 
 var FullMap = {
 	calculateCenter: function() {
-		mapData.center = map.getCenter();
+		FullMap.center = map.getCenter();
 	},
+	center: 0,
 	initialize: function() {
 		// var bounds = new google.maps.LatLngBounds();
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
@@ -91,7 +116,7 @@ var FullMap = {
 			FullMap.calculateCenter();
 		});
 		google.maps.event.addDomListener(window, 'resize', function() {
-			map.setCenter(mapData.center);
+			map.setCenter(FullMap.center);
 		});
 
 		for (var i = 0; i < mapData.locations.length; i++) {
@@ -100,10 +125,9 @@ var FullMap = {
 		 	var infowindow = new google.maps.InfoWindow();
 			var service = new google.maps.places.PlacesService(map);
 
-
-					google.maps.event.addListener(infowindow,'closeclick',function(){
-						console.log("close")
-					});
+			google.maps.event.addListener(infowindow,'closeclick',function(){
+				console.log("close")
+			});
 
 			service.getDetails(request, function(place, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -141,9 +165,7 @@ var FullMap = {
 }
 
 function initializePage() {
-	//ko.applyBindings(new ViewModel());
 	// DetailView.renderNotShowing();
 	FullMap.initializeMap();
+	ko.applyBindings(new ViewModel());
 }
-
-initializePage();

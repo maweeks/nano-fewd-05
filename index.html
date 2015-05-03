@@ -12,11 +12,12 @@
 	</head>
 	<body>
 		<div id="map-canvas"></div>
-		<button class="overlayOne" id="searchButton" onclick="SearchView.renderShowing()">Search</button>
 
-		<div class="overlayTwo notNow" id="searchContent">
+		<button class="overlayOne" data-bind="click: showSearch" id="searchButton" >Search</button>
+
+		<div data-bind="css: searchClass" id="searchContent">
 			<div class="close details">
-				<button onclick="SearchView.renderNotShowing()">Close</button>
+				<button data-bind="click: hideSearch">Close</button>
 			</div>
 			<div class="search" id="searchInfo">
 				<input>
@@ -25,13 +26,17 @@
 			</div>
 		</div>
 
-		<button class="overlayOne" id="detailsButton" onclick="DetailView.renderShowing()">Details</button>
+		<button class="overlayOne" data-bind="click: showDetails" id="detailsButton" >Details</button>
 
-		<div class="overlayTwo notNow" id="detailsContent">
+		<div data-bind="css: detailsClass" id="detailsContent">
 			<div class="close details">
-				<button onclick="DetailView.renderNotShowing()">Close</button>
+				<button data-bind="click: hideDetails">Close</button>
 			</div>
 			<div class="details" id="detailsInfo"></div>
 		</div>
+
+		<script type="text/javascript">
+			initializePage();
+		</script>
 	</body>
 </html>
