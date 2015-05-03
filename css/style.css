@@ -1,9 +1,43 @@
-html, body, #map-canvas {
+html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+    width: 100%;
 }
 
 body {
-    width: 100%;
+	position: relative;
 }
+
+#detaitsButton {
+	top: 10px;
+	right: 10px;
+}
+
+#map-canvas {
+	height: 100%;
+	left: 0;
+	top: 0;
+	width: 100%;
+}
+
+#searchButton {
+	left: 10px;
+	top: 10px;
+}
+
+.overlayOne {
+	position: absolute;
+	z-index: 11;
+}
+
+.overlayTwo {
+	position: absolute;
+	z-index: 12;
+}
+
+.overlayThree {
+	position: absolute;
+	z-index: 13;
+}
+
