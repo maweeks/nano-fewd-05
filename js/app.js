@@ -36,20 +36,25 @@ var ViewModel = function() {
 
 // Views
 var DetailView = {
+	createMapData: function() {
+		var selected = mapData.selected;
+		console.log(selected);
+	},
 	renderNotShowing: function () {
-		var detailsElement = document.getElementById('detaitsContent');
+		var detailsElement = document.getElementById('detailsContent');
 		detailsElement.className = detailsElement.className.replace(' notNow', '');
 		detailsElement.className += ' notNow';
 	},
 	renderShowing: function() {
 		// console.log(selected);
-		var detailsElement = document.getElementById('detaitsContent');
+		var detailsElement = document.getElementById('detailsContent');
 		detailsElement.className = detailsElement.className.replace(' notNow', '');
 		if (mapData.selected != "") {
-			console.log("Showing " + selected.name);
+			DetailView.createMapData();
 		}
 		else {
 			console.log("Showing empty");
+			document.getElementById('detailsInfo').innerHTML = '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>';
 		}
 	}
 };

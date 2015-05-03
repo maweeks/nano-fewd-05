@@ -14,17 +14,21 @@ button {
 	width: 56px
 }
 
-#detaitsButton {
-	top: 10px;
-	right: 10px;
+#detailsButton {
+	top: 15px;
+	right: 15px;
 }
 
-#detaitsContent {
+#detailsContent {
 	background-color: rgba(235, 235, 235, 0.9);
 	height: 100%;
 	right: 0;
 	top: 0;
 	width: 275px;
+}
+
+#detailsInfo h3 {
+	text-align: center;
 }
 
 #map-canvas {
@@ -35,12 +39,11 @@ button {
 }
 
 #searchButton {
-	left: 10px;
-	top: 10px;
+	left: 15px;
+	top: 15px;
 }
 
 .close {
-	padding: 10px;
 	text-align: right;
 }
 
@@ -54,6 +57,7 @@ button {
 }
 
 .overlayTwo {
+	padding: 15px;
 	position: absolute;
 	z-index: 12;
 }
