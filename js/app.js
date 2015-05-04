@@ -33,6 +33,7 @@ var ViewModel = function() {
 	var self = this;
 
 	self.locationsList = ko.observableArray([]);
+	self.locationsList.sort(function(left, right) { return left.name == right.name ? 0 : (left.name < right.name ? -1 : 1) })
 	self.selected = ko.observable( "" );
 	self.selectedMarker = ko.observable( "" );
 
@@ -138,7 +139,10 @@ var FullMap = {
 					});
 				}            
 				if (markers.length == mapData.locations.length) {
+					// Sort data list into name order
 					FullMap.calculateCenter();
+					myViewModel.locationsList.sort();
+					console.log("a")
 				}
 			});
 		}

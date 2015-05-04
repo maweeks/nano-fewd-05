@@ -23,8 +23,8 @@
 				<input class="searchBox" placeholder="Filter list..." type="text" >
 			</div>
 			<div class="details search overflowFix" id="searchInfo">
-				<ul class="searchList" id="searchList">
-					<li> asdf</li>
+				<ul class="searchList" data-bind="foreach: locationsList" id="searchList">
+					<li data-bind="text: name"> asdf</li>
 				</ul>
 			</div>
 		</div>
