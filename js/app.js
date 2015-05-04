@@ -121,11 +121,26 @@ var ViewModel = function() {
 	};
 	self.generateFourSquareData = function() {
 		if (self.selected().fourSquare != undefined ) {
-			return '<em>Foursquare: </em>' + self.selected().fourSquare + '<br/><br/>';
+			return '<em>Foursquare: </em>' + self.selected().fourSquare.name + '<br/><br/>';
 		}
 		else {
 			return '<em>Foursquare: </em>unavailable<br/><br/>';
 		}
+	};
+	self.getFourSquare = function() {
+		for (var i = 0; i < self.locationsList().length; i++) {
+			var fLat = self.locationsList()[i].geometry.location.A;
+			var fLong = self.locationsList()[i].geometry.location.F;
+			var fName = self.locationsList()[i].name;
+			var fourUrl = 'https://api.foursquare.com/v2/venues/search?client_id=' + '0EALJTMTNWT15BNWRVTAXRRQHHDF55DJO24PDPSCL3K0FEQ4' + '&client_secret=MAPEXNXNYUKQM2NX2Z5Q5G1RZQHQVSJ5M0A3JHTIUHDDJUQ0&v=20130815' + '&ll=' + fLat + ',' + fLong + '&query=\'' + fName + '\'&limit=1';
+			self.getFourSquareSingle(fourUrl, i);
+		};
+	};
+	self.getFourSquareSingle = function(fourUrl, i) {
+		$.getJSON(fourUrl, function(response){
+			self.locationsList()[i].fourSquare = response.response.venues[0];
+		}).error(function(e){
+		});
 	}
 	// self.generateDetailsName = fucntion() {};
 	self.hideDetails = function() {
@@ -268,6 +283,7 @@ var FullMap = {
 					});
 					if (myViewModel.locationsList().length == mapData.locations.length) {
 						myViewModel.sortLocationsList();
+						myViewModel.getFourSquare();
 					}
 				}
 			});
