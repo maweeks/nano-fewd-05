@@ -24,6 +24,10 @@ button {
 	right: 0;
 }
 
+#detailsInfo {
+	top: 45px;
+}
+
 #detailsInfo h2, #detailsInfo h3 {
 	text-align: center;
 }
@@ -45,19 +49,7 @@ button {
 }
 
 #searchInfo {
-	display: block;
-	position: absolute;
-	width: 100%;
 	top: 95px;
-	bottom: 0px;
-	overflow-y: scroll;
-
-	margin: 0 0 15px 0;
-	padding: 0 15px;
-
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
 }
 
 .closeLeft {
@@ -74,6 +66,18 @@ button {
 
 .notNow {
 	display: none;
+}
+
+.overflowFix {
+	bottom: 0px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	margin: 0 0 15px 0;
+	overflow-y: scroll;
+	padding: 0 15px;
+	position: absolute;
+	width: 100%;
 }
 
 .overlayOne {

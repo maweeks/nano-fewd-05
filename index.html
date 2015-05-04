@@ -22,9 +22,9 @@
 			<div class="details" id="searchBoxHolder">
 				<input class="searchBox" placeholder="Search..." type="text" >
 			</div>
-			<div class="details search" id="searchInfo">
+			<div class="details search overflowFix" id="searchInfo">
 				<ul class="searchList" id="searchList">
-					<li> asdf</li><li> asdfg</li>
+					<li> asdf</li>
 				</ul>
 			</div>
 		</div>
@@ -35,7 +35,7 @@
 			<div class="closeRight details">
 				<button data-bind="click: hideDetails">Close</button>
 			</div>
-			<div class="details" data-bind="html: detailsHTML" id="detailsInfo"></div>
+			<div class="details overflowFix" data-bind="html: detailsHTML" id="detailsInfo"></div>
 		</div>
 
 		<script type="text/javascript">
