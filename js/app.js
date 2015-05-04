@@ -32,7 +32,7 @@ var myViewModel;
 var ViewModel = function() {
 	var self = this;
 
-	self.locationsList = 0;
+	self.locationsList = ko.observableArray([]);
 	self.selected = ko.observable( "" );
 	self.selectedMarker = ko.observable( "" );
 
@@ -100,7 +100,7 @@ var FullMap = {
 
 			service.getDetails(request, function(place, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					console.log(place)
+					myViewModel.locationsList.push(place);
 					var marker = new google.maps.Marker({
 						icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
 						map: map,
