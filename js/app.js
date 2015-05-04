@@ -51,7 +51,6 @@ var ViewModel = function() {
 	};
 	self.showDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", ""));
-		console.log(self.selected())
 		if (self.selected() != "") {
 			self.generateDetails();
 		}
@@ -72,26 +71,18 @@ var ViewModel = function() {
 	self.currentFilter.subscribe(function () {
 	   self.filteredLocations(self.filter());
 	});
+	self.listItemClick = function(index) {
+		google.maps.event.trigger(myViewModel.filteredLocations()[index].marker, 'click');
+	}
 	self.locationsList.subscribe(function () {
 		self.filteredLocations(self.filter());
 	})
 
 	self.filter = function() {
 		if (self.currentFilter() != "") {
-			// return "";
-			
-
 			return ko.utils.arrayFilter(self.locationsList(), function(loc) {
-				console.log(loc.name + " " + self.currentFilter() + " " + (loc.name.indexOf(self.currentFilter()) > -1))
                 return (loc.name.toUpperCase().indexOf(self.currentFilter().toUpperCase()) > -1);
             });
-
-
-			// ko.utils.arrayFilter(self.products(), function(prod) {
-   //              return prod.genre == self.currentFilter();
-   //          });
-
-
 		}
 		else {
 			return self.locationsList();
@@ -102,10 +93,8 @@ var ViewModel = function() {
 		self.searchClass(self.searchClass().replace(" notNow", "") + " notNow");
 	};
 
-
-	// self.searchClass = ko.observable( "overlayTwo notNow" );
-	self.searchClass = ko.observable( "overlayTwo" );
-
+	self.searchClass = ko.observable( "overlayTwo notNow" );
+	// self.searchClass = ko.observable( "overlayTwo" );
 
 	self.showSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", ""));
@@ -123,7 +112,7 @@ var FullMap = {
 	initialize: function() {
 		// var bounds = new google.maps.LatLngBounds();
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
-		var markers = [];
+		// var markers = [];
 
 		google.maps.event.addDomListener(map, 'idle', function() {
 			FullMap.calculateCenter();
@@ -139,24 +128,25 @@ var FullMap = {
 			var service = new google.maps.places.PlacesService(map);
 
 			google.maps.event.addListener(infowindow,'closeclick',function(){
+				myViewModel.selectedMarker().setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
 				myViewModel.selected("");
 				myViewModel.generateError();
 			});
 			FullMap.calculateCenter();
 			service.getDetails(request, function(place, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					myViewModel.locationsList.push(place);
 					var marker = new google.maps.Marker({
 						icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
 						map: map,
 						position: place.geometry.location
 					});
-					markers.push(marker);
-					google.maps.event.addListener(markers[markers.length-1], 'click', function() {
+					place.marker = marker;
+					myViewModel.locationsList.push(place);
+
+					google.maps.event.addListener(place.marker, 'click', function() {
 
 						//clear selected
 						if (myViewModel.selectedMarker() != "") {
-							console.log(myViewModel.selectedMarker());
 							myViewModel.selectedMarker().setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
 						}
 
@@ -181,13 +171,9 @@ var FullMap = {
 						infowindow.setContent(infoWindowText);
 						infowindow.open(map, this);
 					});
-				}            
-				if (markers.length == mapData.locations.length) {
-					// Sort data list into name order
-					myViewModel.sortLocationsList();
-
-
-
+					if (myViewModel.locationsList().length == mapData.locations.length) {
+						myViewModel.sortLocationsList();
+					}
 				}
 			});
 		}

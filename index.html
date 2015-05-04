@@ -24,13 +24,13 @@
 			</div>
 			<div class="details overflowFix search" id="searchInfo">
 				<ul class="searchList" data-bind="foreach: filteredLocations" id="searchList">
-					<li data-bind="text: name"> asdf</li>
+					<li data-bind="click: $parent.listItemClick.bind($data, $index()), text: name"></li>
 				</ul>
 			</div>
 		</div>
 
 		<button class="overlayOne" data-bind="click: showDetails" id="detailsButton" >Details</button>
-
+ 
 		<div data-bind="css: detailsClass" id="detailsContent">
 			<div class="closeRight details">
 				<button data-bind="click: hideDetails">Close</button>

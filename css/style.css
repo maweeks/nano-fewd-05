@@ -119,13 +119,21 @@ button {
 	display: block;
 	height: 100%;
 	max-height: 100%;
+
+
+
 }
 
 .searchList li {
-	background-color: red;
-	width: 100%;
-
+	background-color: #FAFAFA;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 	display: block;
+	height: 24px;
+	margin-bottom: 5px;
+	padding: 3px 5px;
+	width: 100%;
 }
 
 /* When on mobile/thin browser */
