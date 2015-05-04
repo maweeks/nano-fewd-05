@@ -121,7 +121,12 @@ var ViewModel = function() {
 	};
 	self.generateFourSquareData = function() {
 		if (self.selected().fourSquare != undefined ) {
-			return '<em>Foursquare: </em>' + self.selected().fourSquare.name + '<br/><br/>';
+			var fourHTML = '<em>Foursquare: </em><br/>';
+			fourHTML += 'Type: ' + self.selected().fourSquare.categories[0].name + '<br/>';
+			fourHTML += 'Checkins: ' + self.selected().fourSquare.stats.checkinsCount + '<br/>';
+			fourHTML += 'Tips: ' + self.selected().fourSquare.stats.tipCount + '<br/>';
+			fourHTML += 'Users: ' + self.selected().fourSquare.stats.usersCount + '<br/>';
+			return fourHTML;
 		}
 		else {
 			return '<em>Foursquare: </em>unavailable<br/><br/>';
