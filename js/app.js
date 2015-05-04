@@ -70,12 +70,14 @@ var ViewModel = function() {
 
 	self.currentFilter.subscribe(function () {
 	   self.filteredLocations(self.filter());
+	   self.generateMarkers();
 	});
 	self.listItemClick = function(index) {
 		google.maps.event.trigger(myViewModel.filteredLocations()[index].marker, 'click');
 	}
 	self.locationsList.subscribe(function () {
 		self.filteredLocations(self.filter());
+	   self.generateMarkers();
 	})
 
 	self.filter = function() {
@@ -88,7 +90,19 @@ var ViewModel = function() {
 			return self.locationsList();
 		}
 	}
-	 self.filteredLocations = ko.observableArray( self.filter() );
+	self.filteredLocations = ko.observableArray( self.filter() );
+	self.generateMarkers = function() {
+		self.hideMarkers();
+		for (var i = 0; i < self.filteredLocations().length; i++) {
+			self.locationsList()[i].marker.setVisible(true);
+		}
+	}
+	self.hideMarkers = function() {
+		for (var i = 0; i < self.locationsList().length; i++) {
+			self.locationsList()[i].marker.setVisible(false);
+			console.log(self.locationsList()[0].marker)
+		}
+	}
 	self.hideSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", "") + " notNow");
 	};
@@ -138,7 +152,8 @@ var FullMap = {
 					var marker = new google.maps.Marker({
 						icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
 						map: map,
-						position: place.geometry.location
+						position: place.geometry.location,
+						visible: false
 					});
 					place.marker = marker;
 					myViewModel.locationsList.push(place);
