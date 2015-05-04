@@ -5,7 +5,7 @@ var map;
 var mapData = {
 	locations: [
 		{placeId: "ChIJh8UibbXL3kcRSeRb7F8fDDo"}, //Ball Room
-		//{placeId: "ChIJ_bpIw7XL3kcR09ogp8rgfCg"}, //Black Griffin
+		// {placeId: "ChIJ_bpIw7XL3kcR09ogp8rgfCg"}, //Black Griffin
 		{placeId: "ChIJ6Z00V8nL3kcRhNSJi_KNoIE"}, //Chemistry
 		{placeId: "ChIJhTdHADXK3kcRpnOnvhy-6lQ"}, //Chill
 		{placeId: "ChIJB40BgMrL3kcRr07WbPUriKk"}, //Cuban
@@ -34,6 +34,7 @@ var ViewModel = function() {
 
 	self.locationsList = 0;
 	self.selected = ko.observable( "" );
+	self.selectedMarker = ko.observable( "" );
 
 	// details
 	self.detailsClass = ko.observable( "overlayTwo notNow" );
@@ -99,12 +100,23 @@ var FullMap = {
 
 			service.getDetails(request, function(place, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					console.log(place)
 					var marker = new google.maps.Marker({
+						icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
 						map: map,
 						position: place.geometry.location
 					});
 					markers.push(marker);
 					google.maps.event.addListener(markers[markers.length-1], 'click', function() {
+
+						//clear selected
+						if (myViewModel.selectedMarker() != "") {
+							console.log(myViewModel.selectedMarker());
+							myViewModel.selectedMarker().setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+						}
+						//select current marker
+						this.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+						myViewModel.selectedMarker(this);
 
 						myViewModel.selected(place.name);
 						myViewModel.generateDetails();
