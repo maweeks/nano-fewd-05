@@ -78,7 +78,20 @@ var ViewModel = function() {
 
 	self.filter = function() {
 		if (self.currentFilter() != "") {
-			return "";
+			// return "";
+			
+
+			return ko.utils.arrayFilter(self.locationsList(), function(loc) {
+				console.log(loc.name + " " + self.currentFilter() + " " + (loc.name.indexOf(self.currentFilter()) > -1))
+                return (loc.name.toUpperCase().indexOf(self.currentFilter().toUpperCase()) > -1);
+            });
+
+
+			// ko.utils.arrayFilter(self.products(), function(prod) {
+   //              return prod.genre == self.currentFilter();
+   //          });
+
+
 		}
 		else {
 			return self.locationsList();
