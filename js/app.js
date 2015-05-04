@@ -100,7 +100,6 @@ var ViewModel = function() {
 	self.hideMarkers = function() {
 		for (var i = 0; i < self.locationsList().length; i++) {
 			self.locationsList()[i].marker.setVisible(false);
-			console.log(self.locationsList()[0].marker)
 		}
 	}
 	self.hideSearch = function() {
