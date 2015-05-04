@@ -28,18 +28,20 @@ var mapData = {
 var myViewModel;
 
 
-// ModelView
+// The ViewModel to control the interaction of the website.
 var ViewModel = function() {
 	var self = this;
 
+	// Variables to store all locations and the current location.
 	self.locationsList = ko.observableArray([]);
 	self.selected = ko.observable( "" );
 	self.selectedMarker = ko.observable( "" );
 
-	// details
+	// Fuctions and variables required for the details (right) pane
 	self.detailsClass = ko.observable( "overlayTwo notNow" );
 	self.detailsHTML = ko.observable( "" );
 	self.detailsHTMLFour = ko.observable( "" );
+	// Creates and sets the content of the details pane.
 	self.generateDetails = function() {
 		var details = self.generateDetailsName();
 		details += self.generateDetailsWeb();
@@ -54,6 +56,7 @@ var ViewModel = function() {
 	self.generateError = function() {
 		self.detailsHTML( '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>' );
 	};
+	// Create the indivitual elements of the details pane.
 	self.generateDetailsName = function() {
 		if (self.selected().name != undefined) {
 			return '<h2>' + self.selected().name + '</h2>';
@@ -132,6 +135,7 @@ var ViewModel = function() {
 			return '<em>Foursquare: </em>unavailable<br/><br/>';
 		}
 	};
+	// Go through each location and retrieve the foursquare data for it.
 	self.getFourSquare = function() {
 		for (var i = 0; i < self.locationsList().length; i++) {
 			var fLat = self.locationsList()[i].geometry.location.A;
@@ -141,16 +145,18 @@ var ViewModel = function() {
 			self.getFourSquareSingle(fourUrl, i);
 		};
 	};
+	// Get the foursquare data for an individual location.
 	self.getFourSquareSingle = function(fourUrl, i) {
 		$.getJSON(fourUrl, function(response){
 			self.locationsList()[i].fourSquare = response.response.venues[0];
 		}).error(function(e){
 		});
 	}
-	// self.generateDetailsName = fucntion() {};
+	// Hide the details pane.
 	self.hideDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", "") + " notNow");
 	};
+	// Show and fill the details pane.
 	self.showDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", ""));
 		if (self.selected() != "") {
@@ -160,28 +166,30 @@ var ViewModel = function() {
 			self.generateError();
 		}
 	};
-
+	// List all the names of the locations printing them to the console.
 	self.listNames = function() {
 		for (var i = 0; i < self.locationsList().length; i++ ) {
 			console.log(self.locationsList()[i].name);
 		}
 	}
 
-	// search
+	// Fuctions and variables required for the search (left) pane
 	self.currentFilter = ko.observable( "" );
-
+	// Subscribing to the current filter so that when it changes this function is called.
 	self.currentFilter.subscribe(function () {
 	   self.filteredLocations(self.filter());
 	   self.generateMarkers();
 	});
+	// Select the corresponding map marker when a list item is clicked.
 	self.listItemClick = function(index) {
 		google.maps.event.trigger(myViewModel.filteredLocations()[index].marker, 'click');
 	}
+	// If a location is added or removed the filtered list will be updated.
 	self.locationsList.subscribe(function () {
 		self.filteredLocations(self.filter());
 	   self.generateMarkers();
 	})
-
+	// Filter the locationsList to only show valid locations.
 	self.filter = function() {
 		if (self.currentFilter() != "") {
 			return ko.utils.arrayFilter(self.locationsList(), function(loc) {
@@ -192,7 +200,9 @@ var ViewModel = function() {
 			return self.locationsList();
 		}
 	}
+	// A list of all the locatiosn with the filter applied.
 	self.filteredLocations = ko.observableArray( self.filter() );
+	// Hides all markers and then shows unfiltered markers.
 	self.generateMarkers = function() {
 		// Hide all markers.
 		for (var i = 0; i < self.locationsList().length; i++) {
@@ -203,30 +213,31 @@ var ViewModel = function() {
 			self.filteredLocations()[i].marker.setVisible(true);
 		}
 	}
+	// Hide the search pane.
 	self.hideSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", "") + " notNow");
 	};
-
+	// List of classes for the search pane.
 	self.searchClass = ko.observable( "overlayTwo notNow" );
-	// self.searchClass = ko.observable( "overlayTwo" );
-
+	// Show the search pane.
 	self.showSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", ""));
 	};
+	// Custom sort function to the locations by name.
 	self.sortLocationsList = function() {
 		myViewModel.locationsList(myViewModel.locationsList.sort(function(left, right) { return left.name == right.name ? 0 : (left.name < right.name ? -1 : 1) }));
 	}
 }
 
+//A variable containing all the functionality required to create the gooogle map.
 var FullMap = {
+	// Calculate the center of the map for responsive movement.
 	calculateCenter: function() {
 		FullMap.center = map.getCenter();
 	},
 	center: 0,
 	initialize: function() {
-		// var bounds = new google.maps.LatLngBounds();
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapData.options);
-		// var markers = [];
 
 		google.maps.event.addDomListener(map, 'idle', function() {
 			FullMap.calculateCenter();
@@ -294,11 +305,13 @@ var FullMap = {
 			});
 		}
 	},
+	// create the google map
 	initializeMap: function() {
 		google.maps.event.addDomListener(window, 'load', FullMap.initialize);
 	}
 }
 
+// A function containing all the functions required to run on startup.
 function initializePage() {
 	FullMap.initializeMap();
 	myViewModel = new ViewModel();
