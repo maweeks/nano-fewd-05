@@ -39,6 +39,7 @@ var ViewModel = function() {
 	// details
 	self.detailsClass = ko.observable( "overlayTwo notNow" );
 	self.detailsHTML = ko.observable( "" );
+	self.detailsHTMLFour = ko.observable( "" );
 	self.generateDetails = function() {
 		var details = self.generateDetailsName();
 		details += self.generateDetailsWeb();
@@ -47,6 +48,7 @@ var ViewModel = function() {
 		details += self.generateDetailsOpen();
 		details += self.generateDetailsOpeningTimes();
 		details += self.generateDetailsGoogleRating();
+		details += self.generateFourSquareData();
 		self.detailsHTML( details );
 	};
 	self.generateError = function() {
@@ -117,6 +119,14 @@ var ViewModel = function() {
 			return '<em>Google rating: </em>unavailable<br/><br/>';
 		}
 	};
+	self.generateFourSquareData = function() {
+		if (self.selected().fourSquare != undefined ) {
+			return '<em>Foursquare: </em>' + self.selected().fourSquare + '<br/><br/>';
+		}
+		else {
+			return '<em>Foursquare: </em>unavailable<br/><br/>';
+		}
+	}
 	// self.generateDetailsName = fucntion() {};
 	self.hideDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", "") + " notNow");
