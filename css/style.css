@@ -93,7 +93,7 @@ button {
 	overflow: none;
 	position: absolute;
 	top: 0;
-	width: 275px;
+	width: 250px;
 	z-index: 12;
 }
 
@@ -138,7 +138,7 @@ button {
 
 /* When on mobile/thin browser */
 /*@media all and (max-width: 479px) {*/
-@media all and (max-width: 549px) {
+@media all and (max-width: 499px) {
 	.overlayOne {
 		focus {outline:0;}
 	}

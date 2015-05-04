@@ -33,7 +33,6 @@ var ViewModel = function() {
 	var self = this;
 
 	self.locationsList = ko.observableArray([]);
-
 	self.selected = ko.observable( "" );
 	self.selectedMarker = ko.observable( "" );
 
@@ -41,11 +40,84 @@ var ViewModel = function() {
 	self.detailsClass = ko.observable( "overlayTwo notNow" );
 	self.detailsHTML = ko.observable( "" );
 	self.generateDetails = function() {
-		self.detailsHTML( '<h2>' + self.selected() + '</h2>' );
+		var details = self.generateDetailsName();
+		details += self.generateDetailsWeb();
+		details += self.generateDetailsPhone();
+		details += self.generateDetailsAddress();
+		details += self.generateDetailsOpen();
+		details += self.generateDetailsOpeningTimes();
+		details += self.generateDetailsGoogleRating();
+		self.detailsHTML( details );
 	};
 	self.generateError = function() {
 		self.detailsHTML( '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>' );
 	};
+	self.generateDetailsName = function() {
+		if (self.selected().name != undefined) {
+			return '<h2>' + self.selected().name + '</h2>';
+		}
+		else {
+			return '<h2>Name unavailable</h2>';
+		}
+	};
+	self.generateDetailsWeb = function() {
+		if (self.selected().website != undefined) {
+			return '<em>Website: </em><a href="' + self.selected().website + '">' + self.selected().name + '</a><br/><br/>';
+		}
+		else {
+			return '<em>Website: </em>unavailable<br/><br/>';
+		}
+	};
+	self.generateDetailsPhone = function() {
+		if (self.selected().formatted_phone_number != undefined) {
+			return '<em>Phone: </em> ' + self.selected().formatted_phone_number + '<br/><br/>';
+		}
+		else {
+			return '<em>Phone: </em> unavailable<br/><br/>';
+		}
+	};
+	self.generateDetailsAddress = function() {
+		if (self.selected().formatted_address != undefined) {
+			return '<em>Address: </em> ' + self.selected().formatted_address + '<br/><br/>';
+		}
+		else {
+			return '<em>Address: </em> unavailable<br/><br/>';
+		}
+	};
+	self.generateDetailsOpen = function() {
+		if (self.selected().opening_hours != undefined) {
+			if (self.selected().opening_hours.open_now) {
+				return '<em>Status: </em>open for business!<br/><br/>';
+			}
+			else {
+				return '<em>Status: </em>closed<br/><br/>';
+			}
+		}
+		else {
+			return '';
+		}
+	};
+	self.generateDetailsOpeningTimes = function() {
+		if (self.selected().opening_hours != undefined) {
+			var openHTML = '<em>Opening times:</em><br/>';
+			for (var i = 0; i < self.selected().opening_hours.weekday_text.length; i++) {
+				openHTML +=self.selected().opening_hours.weekday_text[i] + '<br/>';
+			}
+			return openHTML + '<br/>';
+		}
+		else {
+			return '<em>Opening times: </em>unavailable<br/><br/>';
+		}
+	};
+	self.generateDetailsGoogleRating = function() {
+		if (self.selected().rating != undefined ) {
+			return '<em>Google rating: </em>' + self.selected().rating + '/5<br/><br/>';
+		}
+		else {
+			return '<em>Google rating: </em>unavailable<br/><br/>';
+		}
+	};
+	// self.generateDetailsName = fucntion() {};
 	self.hideDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", "") + " notNow");
 	};
@@ -92,14 +164,13 @@ var ViewModel = function() {
 	}
 	self.filteredLocations = ko.observableArray( self.filter() );
 	self.generateMarkers = function() {
-		self.hideMarkers();
-		for (var i = 0; i < self.filteredLocations().length; i++) {
-			self.filteredLocations()[i].marker.setVisible(true);
-		}
-	}
-	self.hideMarkers = function() {
+		// Hide all markers.
 		for (var i = 0; i < self.locationsList().length; i++) {
 			self.locationsList()[i].marker.setVisible(false);
+		}
+		// Show filtered markers.
+		for (var i = 0; i < self.filteredLocations().length; i++) {
+			self.filteredLocations()[i].marker.setVisible(true);
 		}
 	}
 	self.hideSearch = function() {
@@ -167,7 +238,7 @@ var FullMap = {
 						//select current marker
 						this.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
 						myViewModel.selectedMarker(this);
-						myViewModel.selected(place.name);
+						myViewModel.selected(place);
 						myViewModel.generateDetails();
 
 						var infoWindowText = "<a href='javascript:myViewModel.showDetails();' >" + place.name + "</a>: ";
