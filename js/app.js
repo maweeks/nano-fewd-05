@@ -94,7 +94,7 @@ var ViewModel = function() {
 	self.generateMarkers = function() {
 		self.hideMarkers();
 		for (var i = 0; i < self.filteredLocations().length; i++) {
-			self.locationsList()[i].marker.setVisible(true);
+			self.filteredLocations()[i].marker.setVisible(true);
 		}
 	}
 	self.hideMarkers = function() {
