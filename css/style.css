@@ -11,7 +11,8 @@ body {
 
 button {
 	background-color: #D9D9D9;
-	width: 56px
+    font-size: 14px;
+	width: 72px
 }
 
 #detailsButton {
@@ -23,7 +24,7 @@ button {
 	right: 0;
 }
 
-#detailsInfo h3 {
+#detailsInfo h2, #detailsInfo h3 {
 	text-align: center;
 }
 
@@ -41,6 +42,22 @@ button {
 
 #searchContent {
 	left: 0;
+}
+
+#searchInfo {
+	display: block;
+	position: absolute;
+	width: 100%;
+	top: 95px;
+	bottom: 0px;
+	overflow-y: scroll;
+
+	margin: 0 0 15px 0;
+	padding: 0 15px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .closeLeft {
@@ -66,7 +83,10 @@ button {
 
 .overlayTwo {
 	background-color: rgba(235, 235, 235, 0.9);
+	bottom: 0;
 	height: 100%;
+	max-height: 100%;
+	overflow: none;
 	position: absolute;
 	top: 0;
 	width: 275px;
@@ -76,6 +96,32 @@ button {
 .overlayThree {
 	position: absolute;
 	z-index: 13;
+}
+
+.searchBox {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-size: 16px;
+	width: 100%;
+}
+
+.searchList {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+
+	display: block;
+	height: 100%;
+	max-height: 100%;
+}
+
+.searchList li {
+	background-color: red;
+	width: 100%;
+
+	display: block;
 }
 
 /* When on mobile/thin browser */

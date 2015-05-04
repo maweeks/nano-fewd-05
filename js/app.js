@@ -39,10 +39,10 @@ var ViewModel = function() {
 	self.detailsClass = ko.observable( "overlayTwo notNow" );
 	self.detailsHTML = ko.observable( "" );
 	self.generateDetails = function() {
-		self.detailsHTML( '<h3>' + self.selected() + '</h3>' );
+		self.detailsHTML( '<h2>' + self.selected() + '</h2>' );
 	};
 	self.generateError = function() {
-		self.detailsHTML( '<h3>Nothing currently selected.</h3><em> Select a pin on the map to view more details. </em>' );
+		self.detailsHTML( '<h3>Nothing currently selected.</h3><em> Select a pin on the <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> map to view more details. </em>' );
 	};
 	self.hideDetails = function() {
 		self.detailsClass(self.detailsClass().replace(" notNow", "") + " notNow");
