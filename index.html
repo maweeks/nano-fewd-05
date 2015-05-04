@@ -20,10 +20,10 @@
 				<button data-bind="click: hideSearch">Close</button>
 			</div>
 			<div class="details" id="searchBoxHolder">
-				<input class="searchBox" placeholder="Filter list..." type="text" >
+				<input class="searchBox" data-bind="textInput: currentFilter" placeholder="Filter list..." type="text" >
 			</div>
-			<div class="details search overflowFix" id="searchInfo">
-				<ul class="searchList" data-bind="foreach: locationsList" id="searchList">
+			<div class="details overflowFix search" id="searchInfo">
+				<ul class="searchList" data-bind="foreach: filteredLocations" id="searchList">
 					<li data-bind="text: name"> asdf</li>
 				</ul>
 			</div>

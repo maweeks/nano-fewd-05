@@ -33,7 +33,7 @@ var ViewModel = function() {
 	var self = this;
 
 	self.locationsList = ko.observableArray([]);
-	self.locationsList.sort(function(left, right) { return left.name == right.name ? 0 : (left.name < right.name ? -1 : 1) })
+
 	self.selected = ko.observable( "" );
 	self.selectedMarker = ko.observable( "" );
 
@@ -60,14 +60,46 @@ var ViewModel = function() {
 		}
 	};
 
+	self.listNames = function() {
+		for (var i = 0; i < self.locationsList().length; i++ ) {
+			console.log(self.locationsList()[i].name);
+		}
+	}
+
 	// search
+	self.currentFilter = ko.observable( "" );
+
+	self.currentFilter.subscribe(function () {
+	   self.filteredLocations(self.filter());
+	});
+	self.locationsList.subscribe(function () {
+		self.filteredLocations(self.filter());
+	})
+
+	self.filter = function() {
+		if (self.currentFilter() != "") {
+			return "";
+		}
+		else {
+			return self.locationsList();
+		}
+	}
+	 self.filteredLocations = ko.observableArray( self.filter() );
 	self.hideSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", "") + " notNow");
 	};
-	self.searchClass = ko.observable( "overlayTwo notNow" );
+
+
+	// self.searchClass = ko.observable( "overlayTwo notNow" );
+	self.searchClass = ko.observable( "overlayTwo" );
+
+
 	self.showSearch = function() {
 		self.searchClass(self.searchClass().replace(" notNow", ""));
 	};
+	self.sortLocationsList = function() {
+		myViewModel.locationsList(myViewModel.locationsList.sort(function(left, right) { return left.name == right.name ? 0 : (left.name < right.name ? -1 : 1) }));
+	}
 }
 
 var FullMap = {
@@ -93,12 +125,11 @@ var FullMap = {
 		 	var infowindow = new google.maps.InfoWindow();
 			var service = new google.maps.places.PlacesService(map);
 
-
 			google.maps.event.addListener(infowindow,'closeclick',function(){
 				myViewModel.selected("");
 				myViewModel.generateError();
 			});
-
+			FullMap.calculateCenter();
 			service.getDetails(request, function(place, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
 					myViewModel.locationsList.push(place);
@@ -115,10 +146,10 @@ var FullMap = {
 							console.log(myViewModel.selectedMarker());
 							myViewModel.selectedMarker().setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
 						}
+
 						//select current marker
 						this.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
 						myViewModel.selectedMarker(this);
-
 						myViewModel.selected(place.name);
 						myViewModel.generateDetails();
 
@@ -140,9 +171,10 @@ var FullMap = {
 				}            
 				if (markers.length == mapData.locations.length) {
 					// Sort data list into name order
-					FullMap.calculateCenter();
-					myViewModel.locationsList.sort();
-					console.log("a")
+					myViewModel.sortLocationsList();
+
+
+
 				}
 			});
 		}
@@ -153,7 +185,6 @@ var FullMap = {
 }
 
 function initializePage() {
-	// DetailView.renderNotShowing();
 	FullMap.initializeMap();
 	myViewModel = new ViewModel();
 	ko.applyBindings(myViewModel);
