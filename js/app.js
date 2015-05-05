@@ -150,6 +150,7 @@ var ViewModel = function() {
         $.getJSON(fourUrl, function(response){
             self.locationsList()[i].fourSquare = response.response.venues[0];
         }).error(function(e){
+            console.log("Foursquare data request failed for loaction " + i + ": " + myViewModel.locationsList()[i].name);
         });
     };
     // Hide the details pane.
