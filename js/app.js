@@ -303,6 +303,9 @@ var FullMap = {
                         myViewModel.getFourSquare();
                     }
                 }
+                else {
+                    console.log("Failed to load place.");
+                }
             });
         }
     },
@@ -311,7 +314,6 @@ var FullMap = {
         google.maps.event.addDomListener(window, 'load', FullMap.initialize);
     }
 };
-
 // A function containing all the functions required to run on startup.
 function initializePage() {
     FullMap.initializeMap();
